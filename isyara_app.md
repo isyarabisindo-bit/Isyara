@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ISYARA – Belajar Bahasa Isyarat BISINDO</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg-main:#DCEEF6;--bg-card:#FFFCFC;--text-main:#16285C;--primary:#2B4A9F;--progress:#2F7FB8;--accent-gam:#FF9F1C;--success:#10B981;--danger:#F43F5E;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg-main);color:var(--text-main);font-family:'Poppins',system-ui,sans-serif;line-height:1.5}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+svg{display:block}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+/* header */
+header{background:var(--bg-card);border-bottom:2px solid var(--text-main);position:sticky;top:env(safe-area-inset-top,0px);z-index:20}
+.hrow{display:flex;align-items:center;gap:16px;padding:12px 0;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.35rem;letter-spacing:.04em;color:var(--primary);margin-right:auto}
+.pill{display:flex;align-items:center;gap:8px;background:var(--bg-main);border-radius:999px;padding:6px 14px;font-weight:600;color:var(--accent-gam)}
+.pill small{color:var(--text-main);font-weight:500;font-size:.75rem}
+.prog{flex:1 1 100%;display:flex;align-items:center;gap:12px;padding-bottom:12px;font-size:.8rem;font-weight:500}
+.bar{flex:1;height:12px;background:var(--bg-main);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:var(--progress);border-radius:99px;transition:width .6s ease}
+nav{display:flex;gap:8px;padding:20px 0 4px;flex-wrap:wrap}
+nav button{border:2px solid var(--primary);background:transparent;color:var(--primary);border-radius:12px;padding:10px 20px;font-weight:600;transition:.2s}
+nav button:hover{background:rgba(43,74,159,.1)}
+nav button[aria-selected=true]{background:var(--primary);color:#fff}
+h1,h2,h3{margin:0}
+h2{font-size:1.5rem;margin:24px 0 6px}
+.sub{margin:0 0 20px;opacity:.85}
+.btn{background:var(--primary);color:#fff;border:0;border-radius:12px;padding:12px 22px;font-weight:600;display:inline-flex;gap:8px;align-items:center;transition:transform .15s,background .2s}
+.btn:hover{background:#223c82;transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:var(--primary);border:2px solid var(--primary)}
+.btn[disabled]{opacity:.5;cursor:default;transform:none}
+/* player */
+.layout{display:grid;grid-template-columns:1fr;gap:24px}
+@media(min-width:900px){.layout{grid-template-columns:1.1fr 1fr;align-items:start}}
+.player{background:var(--bg-card);border-radius:20px;padding:16px}
+.stage{background:var(--bg-card);border:4px solid var(--text-main);border-radius:16px;aspect-ratio:4/3;display:grid;place-items:center;position:relative;overflow:hidden}
+.stage video{width:100%;height:100%;object-fit:contain;background:var(--bg-card)}
+.ph{text-align:center;color:var(--text-main)}
+.ph .big{font-size:5.5rem;font-weight:700;line-height:1;color:var(--primary)}
+.hand{animation:sway 1.6s ease-in-out infinite;transform-origin:50% 90%}
+.paused .hand{animation-play-state:paused}
+@keyframes sway{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg) translateY(-4px)}}
+.tag{position:absolute;left:10px;bottom:8px;font-size:.7rem;opacity:.7}
+.ctrls{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.cbtn{background:var(--primary);color:#fff;border:0;border-radius:12px;min-width:48px;height:48px;padding:0 14px;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:600;transition:transform .15s,background .2s}
+.cbtn:hover{background:#223c82;transform:scale(1.06)}
+.cbtn[aria-pressed=true]{background:var(--text-main)}
+.info{background:var(--bg-card);border-radius:20px;padding:24px}
+.info h3{font-size:1.25rem;margin-bottom:8px}
+.info p{margin:0 0 16px}
+.acts{display:flex;gap:10px;flex-wrap:wrap}
+/* grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:12px;margin-top:28px}
+.card{perspective:600px;background:none;border:0;padding:0;height:84px}
+.card .in{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d;display:block}
+.card:hover .in,.card:focus-visible .in{transform:rotateY(180deg)}
+.card span{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;display:grid;place-items:center;font-weight:700}
+.card .f{background:var(--bg-card);border:2px solid var(--text-main);font-size:1.8rem;color:var(--text-main)}
+.card .b{background:var(--primary);color:#fff;transform:rotateY(180deg);font-size:.75rem;font-weight:600}
+.card.sel .f{border-color:var(--primary);background:#fff;box-shadow:0 0 0 4px var(--primary)}
+.card.done .f::after{content:"";position:absolute;top:6px;right:6px;width:10px;height:10px;border-radius:50%;background:var(--success)}
+/* quiz */
+.qbox{background:var(--bg-card);border-radius:20px;padding:24px;max-width:640px;margin:0 auto 120px}
+.qtop{display:flex;justify-content:space-between;font-weight:600;margin-bottom:12px}
+.qstage{aspect-ratio:16/9;max-height:230px;margin:12px 0 18px}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{background:var(--bg-card);border:2px solid var(--text-main);border-radius:14px;padding:16px;font-size:1.3rem;font-weight:700;transition:.2s}
+.opt:hover:not([disabled]){border-color:var(--primary);background:var(--bg-main);transform:translateY(-2px)}
+.opt.ok{background:var(--success);color:#fff;border-color:var(--success)}
+.opt.no{background:var(--danger);color:#fff;border-color:var(--danger)}
+.center{text-align:center}
+.sheet{position:fixed;left:0;right:0;bottom:0;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px));color:#fff;transform:translateY(110%);transition:transform .35s cubic-bezier(.2,.9,.3,1.2);z-index:40}
+.sheet.show{transform:none}
+.sheet.ok{background:var(--success)}.sheet.no{background:var(--danger)}
+.sheet .in{max-width:640px;margin:0 auto;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.sheet .ic{width:52px;height:52px;border-radius:50%;background:#fff;display:grid;place-items:center;flex:none}
+.sheet .tx{flex:1;min-width:180px}.sheet b{font-size:1.15rem}
+.sheet .btn{background:#fff;color:var(--text-main)}
+.xpfly{position:fixed;font-weight:700;font-size:1.6rem;color:var(--accent-gam);pointer-events:none;z-index:60;animation:fly 1.1s ease-out forwards;text-shadow:0 2px 0 #fff}
+@keyframes fly{from{opacity:1;transform:translateY(0) scale(.8)}to{opacity:0;transform:translateY(-90px) scale(1.4)}}
+/* badges */
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.badge{background:var(--bg-card);border-radius:18px;padding:20px;text-align:center;opacity:.55}
+.badge.on{opacity:1}
+.badge .m{width:64px;height:64px;border-radius:50%;margin:0 auto 10px;display:grid;place-items:center;background:var(--bg-main);color:var(--text-main)}
+.badge.on .m{background:var(--accent-gam);color:#fff}
+.badge p{margin:4px 0 0;font-size:.85rem}
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(22,40,92,.6);display:none;place-items:center;z-index:50;padding:20px}
+.ov.show{display:grid}
+.modal{background:var(--bg-card);border-radius:24px;padding:32px;max-width:380px;width:100%;text-align:center;border-top:8px solid var(--accent-gam);animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.modal .m{width:92px;height:92px;border-radius:50%;background:var(--accent-gam);color:#fff;margin:0 auto 14px;display:grid;place-items:center;animation:bounce 1s ease infinite}
+@keyframes bounce{50%{transform:translateY(-8px) rotate(6deg)}}
+.modal h2{margin-top:0;color:var(--accent-gam)}
+canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:70}
+.auth{max-width:420px;margin:32px auto;background:var(--bg-card);border-radius:24px;padding:28px}
+.auth input{width:100%;padding:12px 14px;border:2px solid var(--text-main);border-radius:12px;background:var(--bg-card);color:var(--text-main);font:inherit;margin:6px 0 14px}
+.auth label{font-weight:600;font-size:.85rem}
+.err{color:var(--danger);font-weight:500;font-size:.85rem;min-height:1.2em;margin:-6px 0 10px}
+.link{background:none;border:0;color:var(--primary);text-decoration:underline;padding:6px 4px;font-weight:500}
+.out nav,.out header .pill,.out .hbtn,.out .prog{display:none}
+.map{display:flex;flex-direction:column;align-items:center;gap:22px;margin:28px 0 40px}
+.node{width:108px;height:108px;border-radius:50%;border:4px solid var(--text-main);background:var(--bg-card);display:grid;align-content:center;justify-items:center;position:relative;font-weight:600;font-size:.78rem;transition:transform .2s}
+.node:nth-child(2n){margin-left:110px}.node:nth-child(2n+1){margin-right:110px}
+.node b{font-size:1.6rem;line-height:1.1}.node:hover{transform:scale(1.07)}
+.node.done{background:var(--progress);border-color:var(--progress);color:#fff}
+.node.cur{background:var(--primary);color:#fff;border-color:var(--accent-gam);box-shadow:0 0 0 7px rgba(255,159,28,.35)}
+.node.lock{opacity:.55}
+.node em{position:absolute;top:-12px;font-style:normal;font-size:.65rem;background:var(--accent-gam);color:var(--text-main);border-radius:99px;padding:1px 10px}
+.note{background:var(--bg-card);border-left:6px solid var(--accent-gam);border-radius:12px;padding:12px 16px;margin-bottom:16px}
+.plan{background:var(--bg-card);border:2px solid var(--text-main);border-radius:18px;padding:20px;text-align:center;font:inherit;color:var(--text-main);transition:.2s}
+.plan:hover,.plan.on{border-color:var(--primary);background:#fff;transform:translateY(-2px)}.plan p{margin:6px 0 0}
+.lb{background:var(--bg-card);border-radius:20px;padding:6px 20px;max-width:640px}
+.row{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--bg-main)}
+.row.me{font-weight:700;color:var(--primary)}.row b{width:28px}.row span{flex:1}.row i{font-style:normal;color:var(--accent-gam);font-weight:600}
+[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+ <div class="hrow">
+  <div class="logo" aria-label="ISYARA">
+   <svg width="40" height="40" viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M6 8h28a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4H20l-8 7v-7H6a4 4 0 0 1-4-4V12a4 4 0 0 1 4-4z" fill="#2B4A9F"/><path d="M14 24v-9a1.6 1.6 0 0 1 3.2 0v5m0-7a1.6 1.6 0 0 1 3.2 0v6m0-5a1.6 1.6 0 0 1 3.2 0v6m0-3a1.6 1.6 0 0 1 3.2 0v6c0 3-2 5-5 5h-1.5c-2 0-3-1-4-3l-2-3" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" transform="translate(2 -1)"/></svg>
+   ISYARA
+  </div>
+  <div class="pill" title="Streak harian"><svg width="22" height="22" viewBox="0 0 24 24" fill="#FF9F1C"><path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-4-1-6 1-10z"/></svg><span id="streak">0</span><small>hari</small></div>
+  <div class="pill" title="Poin XP"><svg width="22" height="22" viewBox="0 0 24 24" fill="#FF9F1C"><path d="m12 2 3 7 7 .6-5.3 4.7 1.6 7.2L12 17.8 5.7 21.5l1.6-7.2L2 9.6 9 9z"/></svg><span id="xp">0</span><small>XP · Lv <span id="lv">1</span></small></div>
+  <div class="pill hbtn" id="hearts" title="Nyawa"></div><button class="btn hbtn" id="bUp">Upgrade</button>
+ </div>
+ <div class="prog"><span>Alur belajar</span><div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="pbar"><i id="pfill"></i></div><b id="ppct">0%</b></div>
+</div></header>
+
+<main class="wrap">
+ <nav aria-label="Menu utama"><button data-v="map">Peta belajar</button><button data-v="board">Peringkat</button><button data-v="badges">Lencana</button><button data-v="plans">Paket</button><button data-v="profile">Profil</button></nav>
+
+ <section id="v-learn" hidden>
+  <h2 id="lvT"></h2>
+  <p class="sub">Tonton tiap gestur, ulangi sesukamu, lalu mulai kuis.</p>
+  <div class="layout">
+   <div class="player">
+    <div class="stage" id="stage"></div>
+    <div class="ctrls">
+     <button class="cbtn" id="bPlay" aria-label="Putar atau jeda"></button>
+     <button class="cbtn" id="bSlow" aria-pressed="false" aria-label="Gerak lambat 0.5x"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>0.5x</button>
+     <button class="cbtn" id="bRep" aria-label="Ulangi"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
+    </div>
+   </div>
+   <div class="info">
+    <h3 id="iTitle"></h3>
+    <p id="iText"></p>
+    <div class="acts">
+     <button class="btn ghost" id="bPrev">Sebelumnya</button>
+     <button class="btn ghost" id="bNext">Berikutnya</button>
+     <button class="btn" id="bDone">Mulai kuis</button><button class="btn ghost" id="bBack">Kembali ke peta</button>
+    </div>
+   </div>
+  </div>
+  <div class="grid" id="grid" role="list"></div>
+ </section>
+
+ <section id="v-auth" class="auth" hidden></section><section id="v-map" hidden></section><section id="v-quiz" hidden></section><section id="v-board" hidden></section><section id="v-plans" hidden></section><section id="v-profile" hidden></section>
+
+ <section id="v-badges" hidden>
+  <h2>Lencana</h2><p class="sub">Kumpulkan lencana dari belajar dan kuis.</p>
+  <div class="bgrid" id="bgrid"></div>
+ </section>
+ <p class="sub" style="margin:32px 0;font-size:.8rem">Catatan: video gestur terhubung otomatis dari Cloudinary. Jika video belum terunggah, animasi ilustrasi pengganti akan ditampilkan.</p>
+</main>
+
+<div class="sheet" id="sheet" role="alert"><div class="in"><div class="ic" id="sIc"></div><div class="tx"><b id="sT"></b><div id="sD"></div></div><button class="btn" id="sBtn">Lanjut</button></div></div>
+<div class="ov" id="ov"><div class="modal" role="dialog" aria-modal="true"><div class="m" id="mIc"></div><h2 id="mT"></h2><p id="mD"></p><button class="btn" id="mBtn">Lanjut belajar</button></div></div>
+<canvas id="cf"></canvas>
+
+<script>
+const $=s=>document.querySelector(s);
+const LET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+/* Terhubung ke Cloudinary fs7trii1 */
+const BASE_URL = 'https://res.cloudinary.com/fs7trii1/video/upload/v1';
+const VIDEO_SRC = {};
+LET.forEach(l => VIDEO_SRC[l] = `${BASE_URL}/${l.toLowerCase()}.mp4`);
+
+const WORDS={A:'Apel',B:'Buku',C:'Cokelat',D:'Domba',E:'Elang',F:'Foto',G:'Garpu',H:'Hujan',I:'Ikan',J:'Jeruk',K:'Kucing',L:'Lampu',M:'Mangga',N:'Nasi',O:'Obat',P:'Payung',Q:'Quran',R:'Roti',S:'Sapi',T:'Topi',U:'Ular',V:'Vas',W:'Wortel',X:'Xilofon',Y:'Yoyo',Z:'Zebra'};
+const ICON={
+ check:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
+ x:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F43F5E" stroke-width="3.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+ star:'<svg width="48" height="48" viewBox="0 0 24 24" fill="#fff"><path d="m12 2 3 7 7 .6-5.3 4.7 1.6 7.2L12 17.8 5.7 21.5l1.6-7.2L2 9.6 9 9z"/></svg>',
+ medal:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="15" r="6"/><path d="m8.5 3 3.5 7 3.5-7"/></svg>'};
+const BADGES=[
+ {id:'first',n:'Langkah pertama',d:'Selesaikan kuis pertama',t:s=>s.quizzes>=1},
+ {id:'perfect',n:'Sempurna',d:'Skor 5/5 di satu kuis',t:s=>s.perfect>=1},
+ {id:'l10',n:'Pemula rajin',d:'Pahami 10 huruf',t:s=>s.learned.length>=10},
+ {id:'l26',n:'Alfabet lengkap',d:'Pahami 26 huruf',t:s=>s.learned.length>=26},
+ {id:'s3',n:'Konsisten',d:'Streak 3 hari',t:s=>s.streak>=3}];
+const lvl=x=>Math.floor(x/100)+1;
+let queue=[];
+function addXP(n){const a=lvl(S.xp);S.xp+=n;if(lvl(S.xp)>a)queue.push({ic:ICON.star,t:'Level Up!',d:'Kamu naik ke Level '+lvl(S.xp)+'. Terus semangat!'});save();hud()}
+function checkBadges(){BADGES.forEach(b=>{if(!S.badges.includes(b.id)&&b.t(S)){S.badges.push(b.id);queue.push({ic:ICON.medal.replace('width="30" height="30"','width="48" height="48"').replace('currentColor','#fff'),t:'Lencana baru!',d:b.n+' – '+b.d})}});save();renderBadges()}
+
+function showQueue(){if(!queue.length)return;const q=queue.shift();$('#mIc').innerHTML=q.ic;$('#mT').textContent=q.t;$('#mD').textContent=q.d;MGO=q.go||null;$('#mBtn').textContent=q.b||'Lanjut belajar';$('#ov').classList.add('show');if(!q.nc)confetti()}
+$('#mBtn').onclick=()=>{$('#ov').classList.remove('show');if(MGO){const g=MGO;MGO=null;return go(g)}setTimeout(showQueue,250)};
+/* confetti */
+function confetti(){const c=$('#cf'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+ const cols=['#FF9F1C','#2B4A9F','#2F7FB8','#10B981','#F43F5E'];
+ const P=Array.from({length:120},()=>({x:Math.random()*c.width,y:-20-Math.random()*200,w:6+Math.random()*6,h:8+Math.random()*8,v:2+Math.random()*4,s:(Math.random()-.5)*3,r:Math.random()*6,c:cols[Math.random()*5|0]}));
+ let f=0;(function d(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.y+=p.v;p.x+=p.s;p.r+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore()});if(++f<180)requestAnimationFrame(d);else x.clearRect(0,0,c.width,c.height)})()}
+function fly(t,el){const r=el.getBoundingClientRect(),d=document.createElement('div');d.className='xpfly';d.textContent=t;d.style.left=r.left+r.width/2-30+'px';d.style.top=r.top-10+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),1100)}
+/* sign stage */
+function stageHTML(l,hide,nov){const src=VIDEO_SRC[l];if(src&&!nov)return `<video src="${src}" muted playsinline loop autoplay aria-label="Gestur huruf ${l}" onerror="this.parentNode.innerHTML=stageHTML('${l}',false,1)"></video>`;
+ return `<div class="ph"><svg class="hand" width="120" height="120" viewBox="0 0 64 64" fill="#2B4A9F" aria-hidden="true"><rect x="14" y="14" width="8" height="26" rx="4"/><rect x="24" y="8" width="8" height="30" rx="4"/><rect x="34" y="10" width="8" height="28" rx="4"/><rect x="44" y="16" width="8" height="24" rx="4"/><path d="M12 34c0-3 4-3 6-1l4 4h28v6c0 8-6 14-14 14H28c-8 0-16-8-16-16z" opacity=".85"/></svg><div class="big">${hide?'?':l}</div></div><span class="tag">Ilustrasi pengganti video</span>`}
+let cur=0,playing=true,slow=false;
+const PL='<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M7 4v16l13-8z"/></svg>',PA='<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>';
+function applyPlay(){const st=$('#stage'),v=st.querySelector('video');st.classList.toggle('paused',!playing);$('#bPlay').innerHTML=playing?PA:PL;
+ st.style.setProperty('--d','1');st.querySelectorAll('.hand').forEach(h=>h.style.animationDuration=slow?'3.2s':'1.6s');
+ if(v){v.playbackRate=slow?.5:1;playing?v.play():v.pause()}}
+function show(i){cur=(i+L.length)%L.length;const l=L[cur];$('#stage').innerHTML=stageHTML(l);playing=true;applyPlay();
+ $('#iTitle').textContent='Huruf '+l;$('#iText').textContent='Contoh kata: '+WORDS[l]+'. Perhatikan bentuk tangan, posisi jari, dan arah gerak, lalu tiru perlahan.';
+ 
+ document.querySelectorAll('.card').forEach((c,j)=>c.classList.toggle('sel',j===cur))}
+$('#bPlay').onclick=()=>{playing=!playing;applyPlay()};
+$('#bSlow').onclick=e=>{slow=!slow;e.currentTarget.setAttribute('aria-pressed',slow);applyPlay()};
+$('#bRep').onclick=()=>{$('#stage').innerHTML=stageHTML(L[cur]);playing=true;applyPlay()};
+$('#bPrev').onclick=()=>show(cur-1);$('#bNext').onclick=()=>show(cur+1);
+function renderGrid(){$('#grid').innerHTML=L.map((l,i)=>`<button class="card ${S.learned.includes(l)?'done':''} ${i===cur?'sel':''}" role="listitem" aria-label="Huruf ${l}" onclick="show(${i})"><span class="in"><span class="f">${l}</span><span class="b">Pelajari</span></span></button>`).join('')}
+function renderBadges(){$('#bgrid').innerHTML=BADGES.map(b=>`<div class="badge ${S.badges.includes(b.id)?'on':''}"><div class="m">${ICON.medal}</div><b>${b.n}</b><p>${b.d}</p></div>`).join('')}
+/* app */
+let L=LET,LV=0,MGO=null,S=null,Q=[],qi=0,score=0,ans=false,AU={m:'in',e:'',i:'',em:''},PAY={pl:null,m:null,fail:false,res:''};
+const MAXL=3,REG=3e5,XPT=[10,15,20],TIER=['Mudah','Sedang','Sulit'],CAMPUS=['KAMPUS2026'];
+const LEVELS=[{n:'Dasar 1',l:'ABCDE'},{n:'Dasar 2',l:'FGHIJ'},{n:'Dasar 3',l:'KLMNO'},{n:'Lanjut 1',l:'PQRST',p:1},{n:'Lanjut 2',l:'UVWXYZ',p:1}];
+const PLANS=[{n:'1 bulan',d:30,p:29000},{n:'3 bulan',d:90,p:69000},{n:'12 bulan',d:365,p:199000}],METH=['QRIS','Transfer bank','E-wallet'];
+const DEMO=[{n:'Alya',x:420},{n:'Bima',x:310},{n:'Citra',x:240},{n:'Dimas',x:150},{n:'Eka',x:60}];
+ICON.lock='<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+const today=(d=new Date())=>d.toISOString().slice(0,10),rp=n=>'Rp'+n.toLocaleString('id-ID');
+const esc=t=>String(t).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';'),fd=t=>new Date(t).toLocaleDateString('id-ID');
+const isPrem=()=>S.prem>Date.now(),dLeft=()=>Math.ceil((S.prem-Date.now())/864e5);
+const NEW=()=>({xp:0,streak:0,last:'',learned:[],quizzes:0,perfect:0,badges:[],done:0,lives:MAXL,lt:Date.now(),prem:0});
+let DB={users:{},cur:''};try{DB=JSON.parse(localStorage.getItem('isyara2'))||DB}catch(e){}
+const persist=()=>{try{localStorage.setItem('isyara2',JSON.stringify(DB))}catch(e){}};
+const save=()=>{if(S)DB.users[DB.cur].s=S;persist()};
+function regen(){if(S.lives>=MAXL){S.lt=Date.now();return}const n=Math.floor((Date.now()-S.lt)/REG);if(n>0){S.lives=Math.min(MAXL,S.lives+n);S.lt=S.lives>=MAXL?Date.now():S.lt+n*REG}}
+function loseLife(){regen();if(S.lives>=MAXL)S.lt=Date.now();S.lives--;save()}
+const heartsHTML=()=>'<span style="display:inline-flex;gap:3px">'+Array.from({length:MAXL},(_,i)=>`<svg width="20" height="20" viewBox="0 0 24 24" fill="${i<S.lives?'#F43F5E':'none'}" stroke="#F43F5E" stroke-width="2"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg>`).join('')+'</span>';
+function hud(){if(!S)return;$('#streak').textContent=S.streak;$('#xp').textContent=S.xp;$('#lv').textContent=lvl(S.xp);
+ const p=Math.round(S.done/LEVELS.length*100);$('#pfill').style.width=p+'%';$('#ppct').textContent=p+'%';$('#pbar').setAttribute('aria-valuenow',p);
+ const w=S.lives<MAXL?Math.max(0,REG-(Date.now()-S.lt)):0;$('#hearts').innerHTML=heartsHTML()+(w?`<small>${Math.floor(w/6e4)}:${String(Math.floor(w%6e4/1e3)).padStart(2,'0')}</small>`:'');
+ $('#bUp').textContent=isPrem()?'Premium aktif':'Upgrade'}
+function go(v){['auth','map','learn','quiz','board','badges','plans','profile'].forEach(x=>$('#v-'+x).hidden=x!==v);document.body.classList.toggle('out',!S);
+ document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.v===v));
+ ({map:renderMap,board:renderBoard,badges:renderBadges,plans:renderPlans,profile:renderProfile,auth:renderAuth})[v]?.();scrollTo(0,0)}
+/* auth */
+const hsh=async p=>{try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(p)}};
+function renderAuth(){const m=AU.m,el=$('#v-auth'),E=`<div class="err" role="alert">${AU.e}</div>`,Go=t=>`<button class="btn" id="aGo">${t}</button>`;
+ const f=(id,l,t='text')=>`<label for="${id}">${l}</label><input id="${id}" type="${t}" autocomplete="off">`;
+ const back='<p><button class="link" data-m="in">Kembali masuk</button></p>';
+ const B={in:f('aE','Email','email')+f('aP','Kata sandi','password')+E+Go('Masuk')+'<p><button class="link" data-m="forgot">Lupa sandi?</button> <button class="link" data-m="up">Daftar akun</button></p>',
+ up:f('aE','Email','email')+f('aP','Kata sandi (min. 6 karakter)','password')+f('aC','Kode kampus (opsional)')+E+Go('Daftar')+'<p><button class="link" data-m="in">Sudah punya akun? Masuk</button></p>',
+ verify:`<p>Tautan verifikasi dikirim ke <b>${esc(AU.em)}</b>. Ini simulasi, tidak ada email sungguhan.</p>${E}${Go('Simulasikan klik tautan')}<p><button class="link" id="aRe">Kirim ulang tautan</button></p>`+back,
+ forgot:f('aE','Email terdaftar','email')+E+Go('Kirim tautan reset')+back,
+ reset:f('aP','Sandi baru','password')+E+Go('Simpan sandi')}[m];
+ el.innerHTML=`<h2 style="margin:0 0 14px">${{in:'Masuk',up:'Daftar akun',verify:'Verifikasi email',forgot:'Lupa sandi',reset:'Buat sandi baru'}[m]}</h2>`+(AU.i?`<p>${AU.i}</p>`:'')+B;
+ el.querySelectorAll('[data-m]').forEach(x=>x.onclick=()=>{AU.m=x.dataset.m;AU.e=AU.i='';renderAuth()});
+ $('#aGo').onclick=authGo;const r=$('#aRe');if(r)r.onclick=()=>{DB.users[AU.em].vt=Date.now();AU.i='Tautan baru dikirim. Tautan lama tidak berlaku lagi.';AU.e='';persist();renderAuth()}}
+async function authGo(){const v=id=>($('#'+id)||{}).value||'',m=AU.m,U=DB.users,em=v('aE').trim().toLowerCase()||AU.em,pw=v('aP');AU.e=AU.i='';
+ if(m==='in'){const u=U[em];if(!u||u.h!==await hsh(pw))AU.e='Email atau kata sandi salah. Periksa lalu coba lagi.';else if(!u.ver){AU.m='verify';AU.em=em}else return enter(em)}
+ else if(m==='up'){if(!/^\S+@\S+\.\S+$/.test(em))AU.e='Format email belum benar.';else if(pw.length<6)AU.e='Kata sandi minimal 6 karakter.';else if(U[em])AU.e='Email sudah terdaftar. Silakan masuk.';
+  else{const u=U[em]={h:await hsh(pw),ver:false,vt:Date.now(),s:NEW()},c=v('aC').trim().toUpperCase();
+   if(c){if(CAMPUS.includes(c))u.s.prem=Date.now()+365*864e5;else AU.i='Kode kampus tidak valid. Akun dibuat sebagai akun gratis; kode bisa dimasukkan lagi di Profil.'}
+   AU.m='verify';AU.em=em}}
+ else if(m==='verify'){const u=U[AU.em];if(Date.now()-u.vt>9e5)AU.e='Tautan kedaluwarsa. Kirim ulang tautan.';else{u.ver=true;AU.m='in';AU.i='Email terverifikasi. Silakan masuk.'}}
+ else if(m==='forgot'){if(!U[em])AU.e='Email belum terdaftar.';else{AU.em=em;AU.m='reset';AU.i='Tautan reset dikirim (simulasi). Buat sandi baru di bawah.'}}
+ else if(m==='reset'){if(pw.length<6)AU.e='Kata sandi minimal 6 karakter.';else{U[AU.em].h=await hsh(pw);AU.m='in';AU.i='Sandi diperbarui. Silakan masuk.'}}
+ persist();renderAuth()}
+function enter(em){DB.cur=em;S=Object.assign(NEW(),DB.users[em].s);regen();save();hud();go('map')}
+/* peta & level */
+function renderMap(){regen();let h='<h2>Peta belajar</h2><p class="sub">Selesaikan level secara berurutan untuk membuka level berikutnya.</p>';
+ if(isPrem()&&dLeft()<=7)h+=`<div class="note">Premium berakhir ${dLeft()} hari lagi. <button class="link" onclick="go('plans')">Perpanjang</button></div>`;
+ else if(S.prem&&!isPrem())h+=`<div class="note">Premium berakhir, akunmu kembali gratis. <button class="link" onclick="go('plans')">Aktifkan lagi</button></div>`;
+ h+='<div class="map">'+LEVELS.map((v,i)=>{const st=i<S.done?'done':i===S.done?'cur':'lock';return `<button class="node ${st}" onclick="openLevel(${i})" aria-label="Level ${i+1} ${v.n}"><b>${i+1}</b>${v.n}<span>${v.l[0]}–${v.l.slice(-1)}</span>${v.p?'<em>Premium</em>':''}</button>`}).join('')+'</div>';
+ $('#v-map').innerHTML=h}
+function openLevel(i){regen();const v=LEVELS[i];
+ if(i>S.done){queue.push({ic:ICON.lock,t:'Level terkunci',d:'Selesaikan level sebelumnya lebih dulu.',b:'Mengerti',nc:1});return showQueue()}
+ if(v.p&&!isPrem()){queue.push({ic:ICON.lock,t:'Butuh Premium',d:'Materi '+v.n+' khusus Premium. Upgrade untuk membukanya.',go:'plans',b:'Lihat paket',nc:1});return showQueue()}
+ LV=i;L=v.l.split('');go('learn');$('#lvT').textContent='Level '+(i+1)+': '+v.n+' (video pengantar)';renderGrid();show(0)}
+/* kuis bertingkat */
+function startQuiz(){regen();if(S.lives<1)return failed();const ls=shuf(L);
+ Q=Array.from({length:6},(_,i)=>{const l=ls[i%ls.length],t=i<2?0:i<4?1:2,o=[...shuf(L.filter(x=>x!==l)),...shuf(LET.filter(x=>x!==l&&!L.includes(x)))].slice(0,t?3:2);return{l,t,g:t!==1,opts:shuf([l,...o])}});
+ qi=0;score=0;go('quiz');renderQ()}
+function renderQ(){const q=Q[qi];ans=false;
+ $('#v-quiz').innerHTML=`<h2 class="center">Level ${LV+1}: ${LEVELS[LV].n}</h2><div class="qbox"><div class="qtop"><span>Soal ${qi+1}/${Q.length} · ${TIER[q.t]}</span>${heartsHTML()}</div><div class="bar"><i style="width:${qi/Q.length*100}%"></i></div>
+ <h3 style="margin-top:18px">${q.g?'Huruf apakah gestur ini?':'Huruf pertama dari kata “'+WORDS[q.l]+'” adalah…'}</h3>${q.g?`<div class="stage qstage">${stageHTML(q.l)}</div>`:'<div style="height:16px"></div>'}
+ <div class="opts">${q.opts.map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join('')}</div></div>`;
+ document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(b))}
+function answer(b){if(ans)return;ans=true;const q=Q[qi],ok=b.dataset.o===q.l;
+ document.querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(o.dataset.o===q.l)o.classList.add('ok');else if(o===b)o.classList.add('no')});
+ $('#sheet').className='sheet show '+(ok?'ok':'no');$('#sIc').innerHTML=ok?ICON.check:ICON.x;
+ if(ok){score++;const x=XPT[q.t];addXP(x);fly('+'+x+' XP',b);$('#sT').textContent='Benar! +'+x+' XP';$('#sD').textContent='Kerja bagus, terus pertahankan.'}
+ else{loseLife();hud();$('#sT').textContent='Belum tepat, tidak apa-apa';$('#sD').textContent='Jawabannya huruf '+q.l+'. Nyawa tersisa '+S.lives+'. Ulangi gestur ini di video pengantar.'}
+ $('#sBtn').textContent=S.lives<1||qi===Q.length-1?'Lihat hasil':'Lanjut'}
+$('#sBtn').onclick=()=>{$('#sheet').classList.remove('show');qi++;if(S.lives<1)return failed();qi<Q.length?renderQ():finish()};
+function failed(){go('quiz');regen();$('#v-quiz').innerHTML=`<div class="qbox center"><h2>Level gagal</h2><p>Nyawa habis. Nyawa terisi 1 setiap 5 menit (lihat penghitung di header). Tonton ulang videonya sambil menunggu.</p><div class="acts" style="justify-content:center"><button class="btn" onclick="openLevel(LV)">Tonton video</button><button class="btn ghost" onclick="go('map')">Ke peta</button></div></div>`;setTimeout(showQueue,400)}
+function finish(){S.quizzes++;if(score===Q.length)S.perfect++;
+ const t=today(),y=today(new Date(Date.now()-864e5));if(S.last!==t){S.streak=S.last===y?S.streak+1:1;S.last=t}
+ const first=LV>=S.done;if(first)S.done=LV+1;L.forEach(l=>{if(!S.learned.includes(l))S.learned.push(l)});
+ addXP(20);checkBadges();hud();const nx=first&&LV+1<LEVELS.length;
+ $('#v-quiz').innerHTML=`<div class="qbox center"><h2>Level selesai!</h2><p style="font-size:3rem;font-weight:700;margin:0;color:var(--primary)">${score}/${Q.length}</p><p>Bonus +20 XP. Streak harianmu ${S.streak} hari. ${first?(nx?'Level '+(LV+2)+' terbuka!':'Semua level selesai!'):'Level diulang.'}</p><div class="acts" style="justify-content:center"><button class="btn" onclick="go('map')">Ke peta</button><button class="btn ghost" onclick="startQuiz()">Ulangi kuis</button></div></div>`;
+ confetti();setTimeout(showQueue,900)}
+/* peringkat, paket, profil */
+function renderBoard(){const r=[...DEMO,...Object.entries(DB.users).map(([e,u])=>({n:e.split('@')[0],x:(e===DB.cur?S:u.s).xp,me:e===DB.cur}))].sort((a,b)=>b.x-a.x);
+ $('#v-board').innerHTML=`<h2>Papan peringkat</h2><p class="sub">Diurutkan berdasarkan total XP.</p><div class="lb">${r.map((x,i)=>`<div class="row ${x.me?'me':''}"><b>${i+1}</b><span>${esc(x.n)}${x.me?' (kamu)':''}</span><i>${x.x} XP</i></div>`).join('')}</div>`}
+function renderPlans(){const P=PAY;let h=`<h2>Paket Premium</h2><p class="sub">${isPrem()?'Premium aktif sampai '+fd(S.prem)+' ('+dLeft()+' hari lagi).':'Buka Level Lanjut dengan Premium. Pembayaran di sini hanya simulasi.'}</p>`;
+ if(P.res==='fail')h+=`<div class="info"><h3>Pembayaran gagal</h3><p>Transaksi belum selesai. Coba lagi atau pilih metode lain.</p><div class="acts"><button class="btn" onclick="payGo()">Coba lagi</button><button class="btn ghost" onclick="PAY.res='';PAY.pl=null;renderPlans()">Batal</button></div></div>`;
+ else if(P.res==='run')h+='<div class="info"><h3>Memproses pembayaran…</h3></div>';
+ else if(P.pl===null)h+=`<div class="bgrid">${PLANS.map((p,i)=>`<button class="plan" onclick="PAY.pl=${i};renderPlans()"><b>${p.n}</b><p>${rp(p.p)}</p></button>`).join('')}</div>`;
+ else h+=`<div class="info"><h3>${PLANS[P.pl].n} · ${rp(PLANS[P.pl].p)}</h3><p>Pilih metode bayar</p><div class="bgrid">${METH.map((m,i)=>`<button class="plan ${P.m===i?'on':''}" onclick="PAY.m=${i};renderPlans()">${m}</button>`).join('')}</div><p><label><input type="checkbox" ${P.fail?'checked':''} onchange="PAY.fail=this.checked"> Simulasikan pembayaran gagal</label></p><div class="acts"><button class="btn" ${P.m===null?'disabled':''} onclick="payGo()">Bayar</button><button class="btn ghost" onclick="PAY.pl=null;PAY.m=null;renderPlans()">Ganti paket</button></div></div>`;
+ $('#v-plans').innerHTML=h}
+function payGo(){PAY.res='run';renderPlans();setTimeout(()=>{if(PAY.fail){PAY.res='fail';return renderPlans()}
+ S.prem=Math.max(Date.now(),S.prem)+PLANS[PAY.pl].d*864e5;save();hud();queue.push({ic:ICON.star,t:'Premium aktif!',d:'Masa Premium diperbarui sampai '+fd(S.prem)+'.'});PAY={pl:null,m:null,fail:false,res:''};renderPlans();showQueue()},1200)}
+function renderProfile(){$('#v-profile').innerHTML=`<h2>Profil</h2><div class="info auth" style="margin:0;max-width:520px"><p><b>${esc(DB.cur)}</b><br>Status: ${isPrem()?'Premium sampai '+fd(S.prem):'Akun gratis'}<br>Level selesai: ${S.done} dari ${LEVELS.length}</p><label for="pC">Kode kampus</label><input id="pC" placeholder="Masukkan kode"><div class="err" id="pE"></div><div class="acts"><button class="btn" id="pA">Terapkan kode</button><button class="btn ghost" id="pO">Keluar akun</button></div></div>`;
+ $('#pA').onclick=()=>{if(CAMPUS.includes($('#pC').value.trim().toUpperCase())){S.prem=Math.max(Date.now(),S.prem)+365*864e5;save();hud();queue.push({ic:ICON.star,t:'Akses kampus aktif',d:'Premium aktif lewat kode kampus.'});renderProfile();showQueue()}else $('#pE').textContent='Kode tidak valid. Periksa kembali kode dari kampusmu.'};
+ $('#pO').onclick=()=>{save();DB.cur='';S=null;persist();AU={m:'in',e:'',i:'Kamu sudah keluar.',em:''};go('auth')}}
+/* mulai */
+$('#bDone').onclick=startQuiz;$('#bBack').onclick=()=>go('map');$('#bUp').onclick=()=>go('plans');
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
+setInterval(()=>{if(S){regen();hud()}},1000);
+const cu=DB.users[DB.cur];if(cu&&cu.ver){S=Object.assign(NEW(),cu.s);regen();hud();go('map')}else go('auth');
+</script>
+</body>
+</html>
