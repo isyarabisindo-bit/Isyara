@@ -30,7 +30,7 @@ nav button[aria-selected=true]{background:var(--primary);color:#fff}
 h1,h2,h3{margin:0}
 h2{font-size:1.5rem;margin:24px 0 6px}
 .sub{margin:0 0 20px;opacity:.85}
-.btn{background:var(--primary);color:#fff;border:0;border-radius:12px;padding:12px 22px;font-weight:600;display:inline-flex;gap:8px;align-items:center;transition:transform .15s,background .2s}
+.btn{background:var(--primary);color:#fff;border:0;border-radius:12px;padding:12px 22px;font-weight:600;display:inline-flex;gap:8px;align-items:center;justify-content:center;transition:transform .15s,background .2s}
 .btn:hover{background:#223c82;transform:translateY(-2px)}
 .btn.ghost{background:transparent;color:var(--primary);border:2px solid var(--primary)}
 .btn[disabled]{opacity:.5;cursor:default;transform:none}
@@ -206,12 +206,14 @@ function checkBadges(){BADGES.forEach(b=>{if(!S.badges.includes(b.id)&&b.t(S)){S
 
 function showQueue(){if(!queue.length)return;const q=queue.shift();$('#mIc').innerHTML=q.ic;$('#mT').textContent=q.t;$('#mD').textContent=q.d;MGO=q.go||null;$('#mBtn').textContent=q.b||'Lanjut belajar';$('#ov').classList.add('show');if(!q.nc)confetti()}
 $('#mBtn').onclick=()=>{$('#ov').classList.remove('show');if(MGO){const g=MGO;MGO=null;return go(g)}setTimeout(showQueue,250)};
+
 /* confetti */
 function confetti(){const c=$('#cf'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
  const cols=['#FF9F1C','#2B4A9F','#2F7FB8','#10B981','#F43F5E'];
  const P=Array.from({length:120},()=>({x:Math.random()*c.width,y:-20-Math.random()*200,w:6+Math.random()*6,h:8+Math.random()*8,v:2+Math.random()*4,s:(Math.random()-.5)*3,r:Math.random()*6,c:cols[Math.random()*5|0]}));
  let f=0;(function d(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.y+=p.v;p.x+=p.s;p.r+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore()});if(++f<180)requestAnimationFrame(d);else x.clearRect(0,0,c.width,c.height)})()}
 function fly(t,el){const r=el.getBoundingClientRect(),d=document.createElement('div');d.className='xpfly';d.textContent=t;d.style.left=r.left+r.width/2-30+'px';d.style.top=r.top-10+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),1100)}
+
 /* sign stage */
 function stageHTML(l,hide,nov){const src=VIDEO_SRC[l];if(src&&!nov)return `<video src="${src}" muted playsinline loop autoplay aria-label="Gestur huruf ${l}" onerror="this.parentNode.innerHTML=stageHTML('${l}',false,1)"></video>`;
  return `<div class="ph"><svg class="hand" width="120" height="120" viewBox="0 0 64 64" fill="#2B4A9F" aria-hidden="true"><rect x="14" y="14" width="8" height="26" rx="4"/><rect x="24" y="8" width="8" height="30" rx="4"/><rect x="34" y="10" width="8" height="28" rx="4"/><rect x="44" y="16" width="8" height="24" rx="4"/><path d="M12 34c0-3 4-3 6-1l4 4h28v6c0 8-6 14-14 14H28c-8 0-16-8-16-16z" opacity=".85"/></svg><div class="big">${hide?'?':l}</div></div><span class="tag">Ilustrasi pengganti video</span>`}
@@ -222,7 +224,6 @@ function applyPlay(){const st=$('#stage'),v=st.querySelector('video');st.classLi
  if(v){v.playbackRate=slow?.5:1;playing?v.play():v.pause()}}
 function show(i){cur=(i+L.length)%L.length;const l=L[cur];$('#stage').innerHTML=stageHTML(l);playing=true;applyPlay();
  $('#iTitle').textContent='Huruf '+l;$('#iText').textContent='Contoh kata: '+WORDS[l]+'. Perhatikan bentuk tangan, posisi jari, dan arah gerak, lalu tiru perlahan.';
- 
  document.querySelectorAll('.card').forEach((c,j)=>c.classList.toggle('sel',j===cur))}
 $('#bPlay').onclick=()=>{playing=!playing;applyPlay()};
 $('#bSlow').onclick=e=>{slow=!slow;e.currentTarget.setAttribute('aria-pressed',slow);applyPlay()};
@@ -230,6 +231,7 @@ $('#bRep').onclick=()=>{$('#stage').innerHTML=stageHTML(L[cur]);playing=true;app
 $('#bPrev').onclick=()=>show(cur-1);$('#bNext').onclick=()=>show(cur+1);
 function renderGrid(){$('#grid').innerHTML=L.map((l,i)=>`<button class="card ${S.learned.includes(l)?'done':''} ${i===cur?'sel':''}" role="listitem" aria-label="Huruf ${l}" onclick="show(${i})"><span class="in"><span class="f">${l}</span><span class="b">Pelajari</span></span></button>`).join('')}
 function renderBadges(){$('#bgrid').innerHTML=BADGES.map(b=>`<div class="badge ${S.badges.includes(b.id)?'on':''}"><div class="m">${ICON.medal}</div><b>${b.n}</b><p>${b.d}</p></div>`).join('')}
+
 /* app */
 let L=LET,LV=0,MGO=null,S=null,Q=[],qi=0,score=0,ans=false,AU={m:'in',e:'',i:'',em:''},PAY={pl:null,m:null,fail:false,res:''};
 const MAXL=3,REG=3e5,XPT=[10,15,20],TIER=['Mudah','Sedang','Sulit'],CAMPUS=['KAMPUS2026'];
@@ -244,7 +246,7 @@ const isPrem=()=>S.prem>Date.now(),dLeft=()=>Math.ceil((S.prem-Date.now())/864e5
 const NEW=()=>({xp:0,streak:0,last:'',learned:[],quizzes:0,perfect:0,badges:[],done:0,lives:MAXL,lt:Date.now(),prem:0});
 let DB={users:{},cur:''};try{DB=JSON.parse(localStorage.getItem('isyara2'))||DB}catch(e){}
 const persist=()=>{try{localStorage.setItem('isyara2',JSON.stringify(DB))}catch(e){}};
-const save=()=>{if(S)DB.users[DB.cur].s=S;persist()};
+const save=()=>{if(S&&DB.cur&&DB.users[DB.cur])DB.users[DB.cur].s=S;persist()};
 function regen(){if(S.lives>=MAXL){S.lt=Date.now();return}const n=Math.floor((Date.now()-S.lt)/REG);if(n>0){S.lives=Math.min(MAXL,S.lives+n);S.lt=S.lives>=MAXL?Date.now():S.lt+n*REG}}
 function loseLife(){regen();if(S.lives>=MAXL)S.lt=Date.now();S.lives--;save()}
 const heartsHTML=()=>'<span style="display:inline-flex;gap:3px">'+Array.from({length:MAXL},(_,i)=>`<svg width="20" height="20" viewBox="0 0 24 24" fill="${i<S.lives?'#F43F5E':'none'}" stroke="#F43F5E" stroke-width="2"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg>`).join('')+'</span>';
@@ -255,30 +257,80 @@ function hud(){if(!S)return;$('#streak').textContent=S.streak;$('#xp').textConte
 function go(v){['auth','map','learn','quiz','board','badges','plans','profile'].forEach(x=>$('#v-'+x).hidden=x!==v);document.body.classList.toggle('out',!S);
  document.querySelectorAll('nav button').forEach(b=>b.setAttribute('aria-selected',b.dataset.v===v));
  ({map:renderMap,board:renderBoard,badges:renderBadges,plans:renderPlans,profile:renderProfile,auth:renderAuth})[v]?.();scrollTo(0,0)}
-/* auth */
+
+/* auth (VERIFIKASI OTOMATIS) */
 const hsh=async p=>{try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return btoa(p)}};
-function renderAuth(){const m=AU.m,el=$('#v-auth'),E=`<div class="err" role="alert">${AU.e}</div>`,Go=t=>`<button class="btn" id="aGo">${t}</button>`;
+function renderAuth(){
+ const m=AU.m,el=$('#v-auth'),E=`<div class="err" role="alert">${AU.e}</div>`,Go=t=>`<button class="btn" id="aGo" style="width:100%">${t}</button>`;
  const f=(id,l,t='text')=>`<label for="${id}">${l}</label><input id="${id}" type="${t}" autocomplete="off">`;
  const back='<p><button class="link" data-m="in">Kembali masuk</button></p>';
- const B={in:f('aE','Email','email')+f('aP','Kata sandi','password')+E+Go('Masuk')+'<p><button class="link" data-m="forgot">Lupa sandi?</button> <button class="link" data-m="up">Daftar akun</button></p>',
- up:f('aE','Email','email')+f('aP','Kata sandi (min. 6 karakter)','password')+f('aC','Kode kampus (opsional)')+E+Go('Daftar')+'<p><button class="link" data-m="in">Sudah punya akun? Masuk</button></p>',
- verify:`<p>Tautan verifikasi dikirim ke <b>${esc(AU.em)}</b>. Ini simulasi, tidak ada email sungguhan.</p>${E}${Go('Simulasikan klik tautan')}<p><button class="link" id="aRe">Kirim ulang tautan</button></p>`+back,
- forgot:f('aE','Email terdaftar','email')+E+Go('Kirim tautan reset')+back,
- reset:f('aP','Sandi baru','password')+E+Go('Simpan sandi')}[m];
- el.innerHTML=`<h2 style="margin:0 0 14px">${{in:'Masuk',up:'Daftar akun',verify:'Verifikasi email',forgot:'Lupa sandi',reset:'Buat sandi baru'}[m]}</h2>`+(AU.i?`<p>${AU.i}</p>`:'')+B;
+ const guestBtn='<button class="btn ghost" id="aGuest" style="width:100%;margin-top:10px">Masuk Sebagai Tamu (Tanpa Akun)</button>';
+ 
+ const B={
+  in: f('aE','Email','email')+f('aP','Kata sandi','password')+E+Go('Masuk')+guestBtn+'<p><button class="link" data-m="forgot">Lupa sandi?</button> <button class="link" data-m="up">Daftar akun</button></p>',
+  up: f('aE','Email','email')+f('aP','Kata sandi (min. 6 karakter)','password')+f('aC','Kode kampus (opsional)')+E+Go('Daftar')+guestBtn+'<p><button class="link" data-m="in">Sudah punya akun? Masuk</button></p>',
+  forgot: f('aE','Email terdaftar','email')+E+Go('Kirim tautan reset')+back,
+  reset: f('aP','Sandi baru','password')+E+Go('Simpan sandi')+back
+ }[m]||'';
+
+ el.innerHTML=`<h2 style="margin:0 0 14px">${{in:'Masuk',up:'Daftar akun',forgot:'Lupa sandi',reset:'Buat sandi baru'}[m]}</h2>`+(AU.i?`<p>${AU.i}</p>`:'')+B;
  el.querySelectorAll('[data-m]').forEach(x=>x.onclick=()=>{AU.m=x.dataset.m;AU.e=AU.i='';renderAuth()});
- $('#aGo').onclick=authGo;const r=$('#aRe');if(r)r.onclick=()=>{DB.users[AU.em].vt=Date.now();AU.i='Tautan baru dikirim. Tautan lama tidak berlaku lagi.';AU.e='';persist();renderAuth()}}
-async function authGo(){const v=id=>($('#'+id)||{}).value||'',m=AU.m,U=DB.users,em=v('aE').trim().toLowerCase()||AU.em,pw=v('aP');AU.e=AU.i='';
- if(m==='in'){const u=U[em];if(!u||u.h!==await hsh(pw))AU.e='Email atau kata sandi salah. Periksa lalu coba lagi.';else if(!u.ver){AU.m='verify';AU.em=em}else return enter(em)}
- else if(m==='up'){if(!/^\S+@\S+\.\S+$/.test(em))AU.e='Format email belum benar.';else if(pw.length<6)AU.e='Kata sandi minimal 6 karakter.';else if(U[em])AU.e='Email sudah terdaftar. Silakan masuk.';
-  else{const u=U[em]={h:await hsh(pw),ver:false,vt:Date.now(),s:NEW()},c=v('aC').trim().toUpperCase();
-   if(c){if(CAMPUS.includes(c))u.s.prem=Date.now()+365*864e5;else AU.i='Kode kampus tidak valid. Akun dibuat sebagai akun gratis; kode bisa dimasukkan lagi di Profil.'}
-   AU.m='verify';AU.em=em}}
- else if(m==='verify'){const u=U[AU.em];if(Date.now()-u.vt>9e5)AU.e='Tautan kedaluwarsa. Kirim ulang tautan.';else{u.ver=true;AU.m='in';AU.i='Email terverifikasi. Silakan masuk.'}}
- else if(m==='forgot'){if(!U[em])AU.e='Email belum terdaftar.';else{AU.em=em;AU.m='reset';AU.i='Tautan reset dikirim (simulasi). Buat sandi baru di bawah.'}}
- else if(m==='reset'){if(pw.length<6)AU.e='Kata sandi minimal 6 karakter.';else{U[AU.em].h=await hsh(pw);AU.m='in';AU.i='Sandi diperbarui. Silakan masuk.'}}
- persist();renderAuth()}
-function enter(em){DB.cur=em;S=Object.assign(NEW(),DB.users[em].s);regen();save();hud();go('map')}
+ $('#aGo').onclick=authGo;
+ if($('#aGuest')) $('#aGuest').onclick=enterGuest;
+}
+
+function enterGuest(){
+ const gEmail = 'tamu@isyara.com';
+ if(!DB.users[gEmail]){
+  DB.users[gEmail] = {h:'guest123', ver:true, vt:Date.now(), s:NEW()};
+ }
+ enter(gEmail);
+}
+
+async function authGo(){
+ const v=id=>($('#'+id)||{}).value||'',m=AU.m,U=DB.users,em=v('aE').trim().toLowerCase()||AU.em,pw=v('aP');
+ AU.e=AU.i='';
+ if(m==='in'){
+  const u=U[em];
+  if(!u || u.h !== await hsh(pw)) AU.e='Email atau kata sandi salah. Periksa lalu coba lagi.';
+  else return enter(em);
+ }
+ else if(m==='up'){
+  if(!/^\S+@\S+\.\S+$/.test(em)) AU.e='Format email belum benar.';
+  else if(pw.length<6) AU.e='Kata sandi minimal 6 karakter.';
+  else if(U[em]) AU.e='Email sudah terdaftar. Silakan langsung Masuk.';
+  else{
+   const u=U[em]={h:await hsh(pw), ver:true, vt:Date.now(), s:NEW()}, c=v('aC').trim().toUpperCase();
+   if(c){
+    if(CAMPUS.includes(c)) u.s.prem=Date.now()+365*864e5;
+    else AU.i='Kode kampus tidak valid. Akun dibuat sebagai gratis.';
+   }
+   persist();
+   return enter(em);
+  }
+ }
+ else if(m==='forgot'){
+  if(!U[em]) AU.e='Email belum terdaftar.';
+  else{ AU.em=em; AU.m='reset'; AU.i='Buat sandi baru di bawah.'; }
+ }
+ else if(m==='reset'){
+  if(pw.length<6) AU.e='Kata sandi minimal 6 karakter.';
+  else{ U[AU.em].h=await hsh(pw); AU.m='in'; AU.i='Sandi diperbarui. Silakan masuk.'; }
+ }
+ persist();
+ renderAuth();
+}
+
+function enter(em){
+ DB.cur=em;
+ if(!DB.users[em].s) DB.users[em].s = NEW();
+ S=Object.assign(NEW(),DB.users[em].s);
+ regen();
+ save();
+ hud();
+ go('map');
+}
+
 /* peta & level */
 function renderMap(){regen();let h='<h2>Peta belajar</h2><p class="sub">Selesaikan level secara berurutan untuk membuka level berikutnya.</p>';
  if(isPrem()&&dLeft()<=7)h+=`<div class="note">Premium berakhir ${dLeft()} hari lagi. <button class="link" onclick="go('plans')">Perpanjang</button></div>`;
@@ -289,6 +341,7 @@ function openLevel(i){regen();const v=LEVELS[i];
  if(i>S.done){queue.push({ic:ICON.lock,t:'Level terkunci',d:'Selesaikan level sebelumnya lebih dulu.',b:'Mengerti',nc:1});return showQueue()}
  if(v.p&&!isPrem()){queue.push({ic:ICON.lock,t:'Butuh Premium',d:'Materi '+v.n+' khusus Premium. Upgrade untuk membukanya.',go:'plans',b:'Lihat paket',nc:1});return showQueue()}
  LV=i;L=v.l.split('');go('learn');$('#lvT').textContent='Level '+(i+1)+': '+v.n+' (video pengantar)';renderGrid();show(0)}
+
 /* kuis bertingkat */
 function startQuiz(){regen();if(S.lives<1)return failed();const ls=shuf(L);
  Q=Array.from({length:6},(_,i)=>{const l=ls[i%ls.length],t=i<2?0:i<4?1:2,o=[...shuf(L.filter(x=>x!==l)),...shuf(LET.filter(x=>x!==l&&!L.includes(x)))].slice(0,t?3:2);return{l,t,g:t!==1,opts:shuf([l,...o])}});
@@ -312,8 +365,9 @@ function finish(){S.quizzes++;if(score===Q.length)S.perfect++;
  addXP(20);checkBadges();hud();const nx=first&&LV+1<LEVELS.length;
  $('#v-quiz').innerHTML=`<div class="qbox center"><h2>Level selesai!</h2><p style="font-size:3rem;font-weight:700;margin:0;color:var(--primary)">${score}/${Q.length}</p><p>Bonus +20 XP. Streak harianmu ${S.streak} hari. ${first?(nx?'Level '+(LV+2)+' terbuka!':'Semua level selesai!'):'Level diulang.'}</p><div class="acts" style="justify-content:center"><button class="btn" onclick="go('map')">Ke peta</button><button class="btn ghost" onclick="startQuiz()">Ulangi kuis</button></div></div>`;
  confetti();setTimeout(showQueue,900)}
+
 /* peringkat, paket, profil */
-function renderBoard(){const r=[...DEMO,...Object.entries(DB.users).map(([e,u])=>({n:e.split('@')[0],x:(e===DB.cur?S:u.s).xp,me:e===DB.cur}))].sort((a,b)=>b.x-a.x);
+function renderBoard(){const r=[...DEMO,...Object.entries(DB.users).map(([e,u])=>({n:e.split('@')[0],x:(e===DB.cur?S:(u.s||NEW())).xp,me:e===DB.cur}))].sort((a,b)=>b.x-a.x);
  $('#v-board').innerHTML=`<h2>Papan peringkat</h2><p class="sub">Diurutkan berdasarkan total XP.</p><div class="lb">${r.map((x,i)=>`<div class="row ${x.me?'me':''}"><b>${i+1}</b><span>${esc(x.n)}${x.me?' (kamu)':''}</span><i>${x.x} XP</i></div>`).join('')}</div>`}
 function renderPlans(){const P=PAY;let h=`<h2>Paket Premium</h2><p class="sub">${isPrem()?'Premium aktif sampai '+fd(S.prem)+' ('+dLeft()+' hari lagi).':'Buka Level Lanjut dengan Premium. Pembayaran di sini hanya simulasi.'}</p>`;
  if(P.res==='fail')h+=`<div class="info"><h3>Pembayaran gagal</h3><p>Transaksi belum selesai. Coba lagi atau pilih metode lain.</p><div class="acts"><button class="btn" onclick="payGo()">Coba lagi</button><button class="btn ghost" onclick="PAY.res='';PAY.pl=null;renderPlans()">Batal</button></div></div>`;
@@ -326,11 +380,14 @@ function payGo(){PAY.res='run';renderPlans();setTimeout(()=>{if(PAY.fail){PAY.re
 function renderProfile(){$('#v-profile').innerHTML=`<h2>Profil</h2><div class="info auth" style="margin:0;max-width:520px"><p><b>${esc(DB.cur)}</b><br>Status: ${isPrem()?'Premium sampai '+fd(S.prem):'Akun gratis'}<br>Level selesai: ${S.done} dari ${LEVELS.length}</p><label for="pC">Kode kampus</label><input id="pC" placeholder="Masukkan kode"><div class="err" id="pE"></div><div class="acts"><button class="btn" id="pA">Terapkan kode</button><button class="btn ghost" id="pO">Keluar akun</button></div></div>`;
  $('#pA').onclick=()=>{if(CAMPUS.includes($('#pC').value.trim().toUpperCase())){S.prem=Math.max(Date.now(),S.prem)+365*864e5;save();hud();queue.push({ic:ICON.star,t:'Akses kampus aktif',d:'Premium aktif lewat kode kampus.'});renderProfile();showQueue()}else $('#pE').textContent='Kode tidak valid. Periksa kembali kode dari kampusmu.'};
  $('#pO').onclick=()=>{save();DB.cur='';S=null;persist();AU={m:'in',e:'',i:'Kamu sudah keluar.',em:''};go('auth')}}
+
 /* mulai */
 $('#bDone').onclick=startQuiz;$('#bBack').onclick=()=>go('map');$('#bUp').onclick=()=>go('plans');
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
 setInterval(()=>{if(S){regen();hud()}},1000);
-const cu=DB.users[DB.cur];if(cu&&cu.ver){S=Object.assign(NEW(),cu.s);regen();hud();go('map')}else go('auth');
+
+const cu=DB.users[DB.cur];
+if(cu){S=Object.assign(NEW(),cu.s||{});regen();hud();go('map')}else go('auth');
 </script>
 </body>
 </html>
