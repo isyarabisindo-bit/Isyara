@@ -2,7 +2,7 @@
 const CFG={
   /* VIDEO: alamat dasar + a.mp4 sampai z.mp4. Contoh Cloudinary:
      'https://res.cloudinary.com/NAMA_CLOUD/video/upload/f_auto,q_auto/' */
-  videoBase:'video/',
+  videoBase:'https://res.cloudinary.com/fs7trii1/video/upload/',
   videoExt:'.mp4',
   wordBase:'',      /* alamat dasar video kata/frasa; kosongkan = sama dengan videoBase (mis. isi '.../upload/kata/' jika di folder kata) */
   /* Jika nama file di Cloudinary punya kode acak (mis. a_x7k2.mp4), isi per huruf di sini.
