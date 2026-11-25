@@ -237,11 +237,11 @@ const LAB={};const LW=(n,s,p)=>({n,p,w:s.split(',').map(x=>{const[a,b]=x.split('
 /* Level 1-7 gratis; level bertanda angka 1 di akhir = Premium. Format kata: nama-file=Label */
 const LEVELS=[{n:'Dasar 1',l:'ABCDE'},{n:'Dasar 2',l:'FGHIJ'},{n:'Dasar 3',l:'KLMNO'},{n:'Dasar 4',l:'PQRST'},{n:'Dasar 5',l:'UVWXYZ'},
 LW('Basic Word 1','maaf=Maaf,perkenalkan=Perkenalkan,salam-kenal=Salam kenal,suka=Suka,tidak-suka=Tidak suka,tidak-mau=Tidak mau,tolong=Tolong'),
-LW('Sapaan','halo=Halo,selamat-pagi=Selamat pagi,selamat-siang=Selamat siang,selamat-malam=Selamat malam,apa-kabar=Apa kabar,terima-kasih=Terima kasih,sampai-jumpa=Sampai jumpa'),
+LW('Kata Tanya','apa=Apa,berapa=Berapa,bagaimana=Bagaimana,dimana=Di mana,kapan=Kapan,siapa=Siapa,kenapa=Kenapa'),
+LW('Sapaan','halo=Halo,selamat-pagi=Selamat pagi,selamat-siang=Selamat siang,selamat-malam=Selamat malam,apa-kabar=Apa kabar,terima-kasih=Terima kasih,sampai-jumpa=Sampai jumpa',1),
 LW('Basic Word 2','saya=Saya,kamu=Kamu,ya=Ya,tidak=Tidak,makan=Makan,minum=Minum,belajar=Belajar,pergi=Pergi',1),
-LW('Kata Tanya','apa=Apa,siapa=Siapa,di-mana=Di mana,kapan=Kapan,kenapa=Kenapa,bagaimana=Bagaimana',1),
 LW('Waktu','pagi=Pagi,siang=Siang,sore=Sore,malam=Malam,hari-ini=Hari ini,besok=Besok,kemarin=Kemarin,sekarang=Sekarang',1)];
-const OPEN=CFG.levelBuka||6; /* jumlah level yang sudah dibuka; level sesudahnya 'Segera hadir' */
+const OPEN=CFG.levelBuka||7; /* jumlah level yang sudah dibuka; level sesudahnya 'Segera hadir' */
 LEVELS.forEach(v=>(v.w||[]).forEach(id=>VIDEO_SRC[id]=(CFG.wordBase||CFG.videoBase)+id+CFG.videoExt));Object.assign(VIDEO_SRC,CFG.videos);
 const PLANS=[{n:'1 bulan',d:30,p:29000},{n:'3 bulan',d:90,p:69000},{n:'12 bulan',d:365,p:199000}],METH=['QRIS','Transfer bank','E-wallet'];
 const DEMO=[{n:'Alya',x:420},{n:'Bima',x:310},{n:'Citra',x:240},{n:'Dimas',x:150},{n:'Eka',x:60}];
