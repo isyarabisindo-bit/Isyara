@@ -8,12 +8,12 @@ const CFG={
   /* Jika nama file di Cloudinary punya kode acak (mis. a_x7k2.mp4), isi per huruf di sini.
      Contoh: videos:{A:'https://res.cloudinary.com/.../a_x7k2.mp4', B:'https://.../b_q9d1.mp4'} */
   videos:{},
-  wa:'',            /* nomor WhatsApp admin, format 628xxxxxxxxxx */
-  email:'',         /* email admin */
-  admin:'',         /* email akun yang boleh membuka panel admin */
-  secret:'GANTI-RAHASIA-INI',
+  wa:'',            /* nomor WhatsApp admin, format 6283822303169 */
+  email:'',         /* kawan.isyara@gmail.com */
+  admin:'',         /* fauziahlatif@upi.edu */
+  secret:'IsyaraBisindo',
   qris:'qris.png',
   merchant:'Flaavor1st',
   campus:'Program Studi Teknologi Pendidikan',
-  team:[{n:'Fauziah Latif',r:'Teknologi Pendidikan'},{n:'Bilqis Putri Yanuar A.',r:'Teknologi Pendidikan'},{n:'Imanuel Sinaga',r:'Teknologi Pendidikan'},{n:'Deyshadia Haira Salma',r:'Teknologi Pendidikan'}]
+  team:[{n:'Fauziah Latif',r:'Teknologi Pendidikan'},{n:'Bilqis Putri Yanuar A.',r:'Teknologi Pendidikan'},{n:'Imanuel Sinaga',r:'Teknologi Pendidikan'},{n:'Deyshadia Haira Salma',r:'Teknologi Pendidikan'},{n:'Meylia Salveeza',r:'Teknologi Pendidikan'}]
 };
