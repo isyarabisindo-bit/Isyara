@@ -178,13 +178,12 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:70}
 <div class="ov" id="ov"><div class="modal" role="dialog" aria-modal="true"><div class="m" id="mIc"></div><h2 id="mT"></h2><p id="mD"></p><button class="btn" id="mBtn">Lanjut belajar</button></div></div>
 <canvas id="cf"></canvas>
 
+<script src="config.js"></script>
 <script>
 const $=s=>document.querySelector(s);
 const LET='ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 /* Pasang video BISINDO: VIDEO_SRC.A='video/a.mp4' */
-/* PENGATURAN: isi sesuai datamu */
-const CFG={videoBase:'video/',videoExt:'.mp4',wa:'',email:'',admin:'',secret:'GANTI-RAHASIA-INI',qris:'qris.png',merchant:'Flaavor1st',campus:'Program Studi Teknologi Pendidikan',team:[{n:'Fauziah Latif',r:'Teknologi Pendidikan'},{n:'Bilqis Putri Yanuar A.',r:'Teknologi Pendidikan'},{n:'Imanuel Sinaga',r:'Teknologi Pendidikan'},{n:'Deyshadia Haira Salma',r:'Teknologi Pendidikan'}]};
-const VIDEO_SRC={};LET.forEach(l=>VIDEO_SRC[l]=CFG.videoBase+l.toLowerCase()+CFG.videoExt);
+const VIDEO_SRC={};LET.forEach(l=>VIDEO_SRC[l]=CFG.videoBase+l.toLowerCase()+CFG.videoExt);Object.assign(VIDEO_SRC,CFG.videos);
 const WORDS={A:'Apel',B:'Buku',C:'Cokelat',D:'Domba',E:'Elang',F:'Foto',G:'Garpu',H:'Hujan',I:'Ikan',J:'Jeruk',K:'Kucing',L:'Lampu',M:'Mangga',N:'Nasi',O:'Obat',P:'Payung',Q:'Quran',R:'Roti',S:'Sapi',T:'Topi',U:'Ular',V:'Vas',W:'Wortel',X:'Xilofon',Y:'Yoyo',Z:'Zebra'};
 const ICON={
  check:'<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>',
@@ -195,7 +194,7 @@ const BADGES=[
  {id:'first',n:'Langkah pertama',d:'Selesaikan kuis pertama',t:s=>s.quizzes>=1},
  {id:'perfect',n:'Sempurna',d:'Skor 5/5 di satu kuis',t:s=>s.perfect>=1},
  {id:'l10',n:'Pemula rajin',d:'Pahami 10 huruf',t:s=>s.learned.length>=10},
- {id:'l26',n:'Alfabet lengkap',d:'Pahami 26 huruf',t:s=>s.learned.length>=26},
+ {id:'l26',n:'Alfabet lengkap',d:'Pahami 26 huruf',t:s=>LET.every(x=>s.learned.includes(x))},
  {id:'s3',n:'Konsisten',d:'Streak 3 hari',t:s=>s.streak>=3}];
 const lvl=x=>Math.floor(x/100)+1;
 let queue=[];
@@ -211,27 +210,35 @@ function confetti(){const c=$('#cf'),x=c.getContext('2d');c.width=innerWidth;c.h
  let f=0;(function d(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.y+=p.v;p.x+=p.s;p.r+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore()});if(++f<180)requestAnimationFrame(d);else x.clearRect(0,0,c.width,c.height)})()}
 function fly(t,el){const r=el.getBoundingClientRect(),d=document.createElement('div');d.className='xpfly';d.textContent=t;d.style.left=r.left+r.width/2-30+'px';d.style.top=r.top-10+'px';document.body.appendChild(d);setTimeout(()=>d.remove(),1100)}
 /* sign stage (tanpa oranye) */
-function stageHTML(l,hide,nov){const src=VIDEO_SRC[l];if(src&&!nov)return `<video src="${src}" muted playsinline loop autoplay aria-label="Gestur huruf ${l}" onerror="this.parentNode.innerHTML=stageHTML('${l}',false,1)"></video>`;
- return `<div class="ph"><svg class="hand" width="120" height="120" viewBox="0 0 64 64" fill="#2B4A9F" aria-hidden="true"><rect x="14" y="14" width="8" height="26" rx="4"/><rect x="24" y="8" width="8" height="30" rx="4"/><rect x="34" y="10" width="8" height="28" rx="4"/><rect x="44" y="16" width="8" height="24" rx="4"/><path d="M12 34c0-3 4-3 6-1l4 4h28v6c0 8-6 14-14 14H28c-8 0-16-8-16-16z" opacity=".85"/></svg><div class="big">${hide?'?':l}</div></div><span class="tag">Ilustrasi pengganti video</span>`}
+function stageHTML(l,hide,nov){const src=VIDEO_SRC[l];if(src&&!nov)return `<video src="${src}" muted playsinline loop autoplay aria-label="Gestur ${LAB[l]||'huruf '+l}" onerror="this.parentNode.innerHTML=stageHTML('${l}',false,1)"></video>`;
+ return `<div class="ph"><svg class="hand" width="120" height="120" viewBox="0 0 64 64" fill="#2B4A9F" aria-hidden="true"><rect x="14" y="14" width="8" height="26" rx="4"/><rect x="24" y="8" width="8" height="30" rx="4"/><rect x="34" y="10" width="8" height="28" rx="4"/><rect x="44" y="16" width="8" height="24" rx="4"/><path d="M12 34c0-3 4-3 6-1l4 4h28v6c0 8-6 14-14 14H28c-8 0-16-8-16-16z" opacity=".85"/></svg><div class="big" style="${LAB[l]?'font-size:2rem':''}">${hide?'?':(LAB[l]||l)}</div></div><span class="tag" ${/debug/.test(location.search)?'style="right:10px;word-break:break-all"':''}>Ilustrasi pengganti video${/debug/.test(location.search)&&VIDEO_SRC[l]?' · dicoba: '+esc(VIDEO_SRC[l]):''}</span>`}
 let cur=0,playing=true,slow=false;
 const PL='<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M7 4v16l13-8z"/></svg>',PA='<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>';
 function applyPlay(){const st=$('#stage'),v=st.querySelector('video');st.classList.toggle('paused',!playing);$('#bPlay').innerHTML=playing?PA:PL;
  st.style.setProperty('--d','1');st.querySelectorAll('.hand').forEach(h=>h.style.animationDuration=slow?'3.2s':'1.6s');
  if(v){v.playbackRate=slow?.5:1;playing?v.play():v.pause()}}
 function show(i){cur=(i+L.length)%L.length;const l=L[cur];$('#stage').innerHTML=stageHTML(l);playing=true;applyPlay();
- $('#iTitle').textContent='Huruf '+l;$('#iText').textContent='Contoh kata: '+WORDS[l]+'. Perhatikan bentuk tangan, posisi jari, dan arah gerak, lalu tiru perlahan.';
+ const w=LAB[l];$('#iTitle').textContent=w||'Huruf '+l;$('#iText').textContent=w?'Perhatikan bentuk tangan, ekspresi wajah, posisi, dan arah gerak, lalu tiru perlahan.':'Contoh kata: '+WORDS[l]+'. Perhatikan bentuk tangan, posisi jari, dan arah gerak, lalu tiru perlahan.';
  
  document.querySelectorAll('.card').forEach((c,j)=>c.classList.toggle('sel',j===cur))}
 $('#bPlay').onclick=()=>{playing=!playing;applyPlay()};
 $('#bSlow').onclick=e=>{slow=!slow;e.currentTarget.setAttribute('aria-pressed',slow);applyPlay()};
 $('#bRep').onclick=()=>{$('#stage').innerHTML=stageHTML(L[cur]);playing=true;applyPlay()};
 $('#bPrev').onclick=()=>show(cur-1);$('#bNext').onclick=()=>show(cur+1);
-function renderGrid(){$('#grid').innerHTML=L.map((l,i)=>`<button class="card ${S.learned.includes(l)?'done':''} ${i===cur?'sel':''}" role="listitem" aria-label="Huruf ${l}" onclick="show(${i})"><span class="in"><span class="f">${l}</span><span class="b">Pelajari</span></span></button>`).join('')}
+function renderGrid(){$('#grid').innerHTML=L.map((l,i)=>`<button class="card ${S.learned.includes(l)?'done':''} ${i===cur?'sel':''}" role="listitem" aria-label="${LAB[l]||'Huruf '+l}" onclick="show(${i})"><span class="in"><span class="f" style="${LAB[l]?'font-size:.8rem;padding:4px;text-align:center':''}">${LAB[l]||l}</span><span class="b">Pelajari</span></span></button>`).join('')}
 function renderBadges(){$('#bgrid').innerHTML=BADGES.map(b=>`<div class="badge ${S.badges.includes(b.id)?'on':''}"><div class="m">${ICON.medal}</div><b>${b.n}</b><p>${b.d}</p></div>`).join('')}
 /* app */
 let L=LET,LV=0,MGO=null,S=null,Q=[],qi=0,score=0,ans=false,AU={m:'in',e:'',i:'',em:''},PAY={pl:null,m:null,fail:false,res:''};
 const MAXL=3,REG=3e5,XPT=[10,15,20],TIER=['Mudah','Sedang','Sulit'],CAMPUS=['KAMPUS2026'];
-const LEVELS=[{n:'Dasar 1',l:'ABCDE'},{n:'Dasar 2',l:'FGHIJ'},{n:'Dasar 3',l:'KLMNO'},{n:'Lanjut 1',l:'PQRST',p:1},{n:'Lanjut 2',l:'UVWXYZ',p:1}];
+const LAB={};const LW=(n,s,p)=>({n,p,w:s.split(',').map(x=>{const[a,b]=x.split('=');LAB[a]=b;return a})});
+/* Level 1-7 gratis; level bertanda angka 1 di akhir = Premium. Format kata: nama-file=Label */
+const LEVELS=[{n:'Dasar 1',l:'ABCDE'},{n:'Dasar 2',l:'FGHIJ'},{n:'Dasar 3',l:'KLMNO'},{n:'Dasar 4',l:'PQRST'},{n:'Dasar 5',l:'UVWXYZ'},
+LW('Sapaan','halo=Halo,selamat-pagi=Selamat pagi,selamat-siang=Selamat siang,selamat-malam=Selamat malam,apa-kabar=Apa kabar,terima-kasih=Terima kasih,maaf=Maaf,sampai-jumpa=Sampai jumpa'),
+LW('Basic Word 1','saya=Saya,kamu=Kamu,dia=Dia,kita=Kita,ya=Ya,tidak=Tidak,tolong=Tolong,nama=Nama'),
+LW('Basic Word 2','makan=Makan,minum=Minum,tidur=Tidur,belajar=Belajar,pergi=Pergi,datang=Datang,mau=Mau,bisa=Bisa',1),
+LW('Kata Tanya','apa=Apa,siapa=Siapa,di-mana=Di mana,kapan=Kapan,kenapa=Kenapa,bagaimana=Bagaimana',1),
+LW('Waktu','pagi=Pagi,siang=Siang,sore=Sore,malam=Malam,hari-ini=Hari ini,besok=Besok,kemarin=Kemarin,sekarang=Sekarang',1)];
+LEVELS.forEach(v=>(v.w||[]).forEach(id=>VIDEO_SRC[id]=(CFG.wordBase||CFG.videoBase)+id+CFG.videoExt));Object.assign(VIDEO_SRC,CFG.videos);
 const PLANS=[{n:'1 bulan',d:30,p:29000},{n:'3 bulan',d:90,p:69000},{n:'12 bulan',d:365,p:199000}],METH=['QRIS','Transfer bank','E-wallet'];
 const DEMO=[{n:'Alya',x:420},{n:'Bima',x:310},{n:'Citra',x:240},{n:'Dimas',x:150},{n:'Eka',x:60}];
 ICON.lock='<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
@@ -281,26 +288,28 @@ function enter(em){DB.cur=em;S=Object.assign(NEW(),DB.users[em].s);regen();save(
 function renderMap(){regen();let h='<h2>Peta belajar</h2><p class="sub">Selesaikan level secara berurutan untuk membuka level berikutnya.</p>';
  if(isPrem()&&dLeft()<=7)h+=`<div class="note">Premium berakhir ${dLeft()} hari lagi. <button class="link" onclick="go('plans')">Perpanjang</button></div>`;
  else if(S.prem&&!isPrem())h+=`<div class="note">Premium berakhir, akunmu kembali gratis. <button class="link" onclick="go('plans')">Aktifkan lagi</button></div>`;
- h+='<div class="map">'+LEVELS.map((v,i)=>{const st=i<S.done?'done':i===S.done?'cur':'lock';return `<button class="node ${st}" onclick="openLevel(${i})" aria-label="Level ${i+1} ${v.n}"><b>${i+1}</b>${v.n}<span>${v.l[0]}–${v.l.slice(-1)}</span>${v.p?'<em>Premium</em>':''}</button>`}).join('')+'</div>';
+ h+='<div class="map">'+LEVELS.map((v,i)=>{const st=i<S.done?'done':i===S.done?'cur':'lock';return `<button class="node ${st}" onclick="openLevel(${i})" aria-label="Level ${i+1} ${v.n}"><b>${i+1}</b>${v.n}<span>${v.w?v.w.length+' kata':v.l[0]+'–'+v.l.slice(-1)}</span>${v.p?'<em>Premium</em>':''}</button>`}).join('')+'</div>';
  $('#v-map').innerHTML=h}
 function openLevel(i){regen();const v=LEVELS[i];
  if(i>S.done){queue.push({ic:ICON.lock,t:'Level terkunci',d:'Selesaikan level sebelumnya lebih dulu.',b:'Mengerti',nc:1});return showQueue()}
  if(v.p&&!isPrem()){queue.push({ic:ICON.lock,t:'Butuh Premium',d:'Materi '+v.n+' khusus Premium. Upgrade untuk membukanya.',go:'plans',b:'Lihat paket',nc:1});return showQueue()}
- LV=i;L=v.l.split('');go('learn');$('#lvT').textContent='Level '+(i+1)+': '+v.n+' (video pengantar)';renderGrid();show(0)}
+ LV=i;L=v.w||v.l.split('');probe(L);go('learn');$('#lvT').textContent='Level '+(i+1)+': '+v.n+' (video pengantar)';renderGrid();show(0)}
 /* kuis bertingkat */
-function startQuiz(){regen();if(S.lives<1)return failed();const ls=shuf(L);
- Q=Array.from({length:6},(_,i)=>{const l=ls[i%ls.length],t=i<2?0:i<4?1:2,o=[...shuf(L.filter(x=>x!==l)),...shuf(LET.filter(x=>x!==l&&!L.includes(x)))].slice(0,t?3:2);return{l,t,g:t!==1&&OK[l]===1,opts:shuf([l,...o])}});
+function startQuiz(){regen();if(S.lives<1)return failed();probe(L);const W=!!LAB[L[0]],ls=shuf(W?L.filter(x=>OK[x]===1):L);
+ if(!ls.length)return noVid();
+ Q=Array.from({length:6},(_,i)=>{const l=ls[i%ls.length],t=i<2?0:i<4?1:2,o=[...shuf(L.filter(x=>x!==l)),...(W?[]:shuf(LET.filter(x=>x!==l&&!L.includes(x))))].slice(0,t?3:2);return{l,t,g:W||(t!==1&&OK[l]===1),opts:shuf([l,...o])}});
  qi=0;score=0;go('quiz');renderQ()}
+function noVid(){go('quiz');$('#v-quiz').innerHTML='<div class="qbox center"><h2>Video belum tersedia</h2><p>Video untuk level ini sedang disiapkan. Silakan coba lagi nanti.</p><div class="acts" style="justify-content:center"><button class="btn" onclick="go(\'map\')">Ke peta</button></div></div>'}
 function renderQ(){const q=Q[qi];ans=false;
  $('#v-quiz').innerHTML=`<h2 class="center">Level ${LV+1}: ${LEVELS[LV].n}</h2><div class="qbox"><div class="qtop"><span>Soal ${qi+1}/${Q.length} · ${TIER[q.t]}</span>${heartsHTML()}</div><div class="bar"><i style="width:${qi/Q.length*100}%"></i></div>
- <h3 style="margin-top:18px">${q.g?'Huruf apakah gestur ini?':'Huruf pertama dari kata “'+WORDS[q.l]+'” adalah…'}</h3>${q.g?`<div class="stage qstage">${stageHTML(q.l,1)}</div>`:'<div style="height:16px"></div>'}
- <div class="opts">${q.opts.map(o=>`<button class="opt" data-o="${o}">${o}</button>`).join('')}</div></div>`;
+ <h3 style="margin-top:18px">${q.g?(LAB[q.l]?'Apa arti gestur ini?':'Huruf apakah gestur ini?'):'Huruf pertama dari kata “'+WORDS[q.l]+'” adalah…'}</h3>${q.g?`<div class="stage qstage">${stageHTML(q.l,1)}</div>`:'<div style="height:16px"></div>'}
+ <div class="opts">${q.opts.map(o=>`<button class="opt" data-o="${o}" style="${LAB[o]?'font-size:1rem':''}">${LAB[o]||o}</button>`).join('')}</div></div>`;
  document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>answer(b))}
 function answer(b){if(ans)return;ans=true;const q=Q[qi],ok=b.dataset.o===q.l;
  document.querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(o.dataset.o===q.l)o.classList.add('ok');else if(o===b)o.classList.add('no')});
  $('#sheet').className='sheet show '+(ok?'ok':'no');$('#sIc').innerHTML=ok?ICON.check:ICON.x;
  if(ok){score++;const x=XPT[q.t];addXP(x);fly('+'+x+' XP',b);$('#sT').textContent='Benar! +'+x+' XP';$('#sD').textContent='Kerja bagus, terus pertahankan.'}
- else{loseLife();hud();$('#sT').textContent='Belum tepat, tidak apa-apa';$('#sD').textContent='Jawabannya huruf '+q.l+'. Nyawa tersisa '+S.lives+'. Ulangi gestur ini di video pengantar.'}
+ else{loseLife();hud();$('#sT').textContent='Belum tepat, tidak apa-apa';$('#sD').textContent='Jawabannya '+(LAB[q.l]?'“'+LAB[q.l]+'”':'huruf '+q.l)+'. Nyawa tersisa '+S.lives+'. Ulangi gestur ini di video pengantar.'}
  $('#sBtn').textContent=S.lives<1||qi===Q.length-1?'Lihat hasil':'Lanjut'}
 $('#sBtn').onclick=()=>{$('#sheet').classList.remove('show');qi++;if(S.lives<1)return failed();qi<Q.length?renderQ():finish()};
 function failed(){go('quiz');regen();$('#v-quiz').innerHTML=`<div class="qbox center"><h2>Level gagal</h2><p>Nyawa habis. Nyawa terisi 1 setiap 5 menit (lihat penghitung di header). Tonton ulang videonya sambil menunggu.</p><div class="acts" style="justify-content:center"><button class="btn" onclick="openLevel(LV)">Tonton video</button><button class="btn ghost" onclick="go('map')">Ke peta</button></div></div>`;setTimeout(showQueue,400)}
@@ -315,11 +324,11 @@ function renderBoard(){const r=[...DEMO,...Object.entries(DB.users).map(([e,u])=
  $('#v-board').innerHTML=`<h2>Papan peringkat</h2><p class="sub">Diurutkan berdasarkan total XP.</p><div class="lb">${r.map((x,i)=>`<div class="row ${x.me?'me':''}"><b>${i+1}</b><span>${esc(x.n)}${x.me?' (kamu)':''}</span><i>${x.x} XP</i></div>`).join('')}</div>`}
 /* video tersedia? (kuis gestur hanya memakai huruf yang videonya berhasil dimuat) */
 const OK={};let LEG='privasi';
-function probe(){LET.forEach(l=>{if(l in OK)return;const v=document.createElement('video');v.preload='metadata';v.onloadedmetadata=()=>OK[l]=1;v.onerror=()=>OK[l]=0;v.src=VIDEO_SRC[l]})}
+function probe(a){(a||[]).forEach(l=>{if(l in OK||!VIDEO_SRC[l])return;const v=document.createElement('video');v.preload='metadata';v.onloadedmetadata=()=>OK[l]=1;v.onerror=()=>OK[l]=0;v.src=VIDEO_SRC[l]})}
 /* paket & pembayaran QRIS manual */
 async function kode(e,pl,amt){const h=await hsh(e+'|'+pl+'|'+amt+'|'+CFG.secret);return 'ISY-'+h.slice(0,4).toUpperCase()+'-'+h.slice(4,8).toUpperCase()}
 function order(i){S.order={pl:i,amt:PLANS[i].p+1+Math.floor(Math.random()*99)};save();renderPlans()}
-function renderPlans(){const o=S&&S.order;let h=`<h2>Paket Premium</h2><p class="sub">${isPrem()?'Premium aktif sampai '+fd(S.prem)+' ('+dLeft()+' hari lagi).':'Buka Level Lanjut dengan Premium.'}</p>`;
+function renderPlans(){const o=S&&S.order;let h=`<h2>Paket Premium</h2><p class="sub">${isPrem()?'Premium aktif sampai '+fd(S.prem)+' ('+dLeft()+' hari lagi).':'Buka Basic Word 2, Kata Tanya, dan Waktu dengan Premium.'}</p>`;
  if(!o)h+=`<div class="bgrid">${PLANS.map((p,i)=>`<button class="plan" onclick="order(${i})"><b>${p.n}</b><p>${rp(p.p)}</p></button>`).join('')}</div>`;
  else{const p=PLANS[o.pl],msg=encodeURIComponent(`Halo admin ISYARA, saya sudah bayar Premium ${p.n}.\nEmail akun: ${DB.cur}\nNominal: ${rp(o.amt)}\n(bukti bayar terlampir)`);
   h+=`<div class="info" style="max-width:520px"><h3>Paket ${p.n}</h3><p>Bayar tepat <b>${rp(o.amt)}</b> (sudah termasuk kode unik ${o.amt-p.p}) lewat QRIS di bawah. Nama merchant yang tampil: <b>${esc(CFG.merchant)}</b>.</p><img class="qris" src="${CFG.qris}" alt="QRIS pembayaran ISYARA"><ol><li>Scan dengan e-wallet atau mobile banking.</li><li>Masukkan nominal persis seperti di atas.</li><li>Screenshot bukti bayar dan kirim ke admin.</li><li>Admin mengirim kode aktivasi. Masukkan di bawah.</li></ol>${CFG.wa?`<a class="btn" href="https://wa.me/${CFG.wa}?text=${msg}" target="_blank" rel="noopener">Kirim bukti via WhatsApp</a>`:'<p>Nomor WhatsApp admin belum diatur.</p>'}<div class="auth" style="margin:16px 0 0;padding:0;background:none"><label for="kc">Kode aktivasi</label><input id="kc" placeholder="ISY-XXXX-XXXX"><div class="err" id="kE"></div></div><div class="acts"><button class="btn" onclick="activate()">Aktifkan</button><button class="btn ghost" onclick="S.order=null;save();renderPlans()">Ganti paket</button></div><p style="font-size:.8rem">Verifikasi dilakukan manual, biasanya dalam 1×24 jam. Baca <button class="link" onclick="legal('refund')">kebijakan refund</button>.</p></div>`}
@@ -345,7 +354,7 @@ function renderContact(){$('#v-contact').innerHTML=`<h2>Kontak dan masukan</h2><
  $('#cW').onclick=()=>send(1);$('#cG').onclick=()=>send(0)}
 const LEGAL={
 privasi:['Kebijakan Privasi',`<p>Terakhir diperbarui: 15 November 2026.</p><h3>Data yang kami simpan</h3><ul><li>Email dan kata sandi (disimpan sebagai hash, bukan teks asli).</li><li>Progres belajar: XP, streak, level, lencana, dan nyawa.</li><li>Pesan di formulir kontak dan bukti bayar yang kamu kirim ke admin.</li></ul><h3>Cara penyimpanan</h3><p>Saat ini data akun dan progres disimpan di peramban perangkatmu. Jika dipindahkan ke server, kebijakan ini akan diperbarui dan kamu diberi tahu.</p><h3>Penggunaan dan pembagian</h3><p>Data dipakai untuk menjalankan akun, progres, peringkat, dan Premium. Kami tidak menjual datamu. Pihak ketiga yang terlibat: GitHub Pages (hosting), Cloudinary (video), serta WhatsApp atau email saat kamu menghubungi kami.</p><h3>Hakmu</h3><p>Kamu dapat meminta akses, perbaikan, atau penghapusan data lewat halaman Kontak, sesuai prinsip pelindungan data pribadi di Indonesia (UU PDP).</p><h3>Pengguna di bawah 18 tahun</h3><p>Gunakan ISYARA dengan izin orang tua atau wali.</p>`],
-syarat:['Syarat Layanan',`<p>Terakhir diperbarui: 15 November 2026.</p><h3>Penggunaan</h3><p>ISYARA adalah media belajar BISINDO untuk tujuan pendidikan. Materinya tidak menggantikan kursus resmi atau juru bahasa isyarat profesional.</p><h3>Akun</h3><p>Kamu bertanggung jawab atas keamanan akunmu. Satu akun untuk satu orang; dilarang membagikan akun atau kode aktivasi.</p><h3>Premium dan pembayaran</h3><ul><li>Premium membuka materi Level Lanjut selama masa paket.</li><li>Pembayaran lewat QRIS diverifikasi manual oleh admin.</li><li>Harga dan paket dapat berubah; pembayaran yang sudah dilakukan tidak terpengaruh.</li><li>Pengembalian dana mengikuti Kebijakan Refund.</li></ul><h3>Hak cipta</h3><p>Video, teks, logo, dan desain ISYARA dilindungi hak cipta. Dilarang mengunduh massal, menggandakan, atau menjualnya kembali tanpa izin.</p><h3>Batas tanggung jawab</h3><p>Layanan diberikan apa adanya dan dapat berhenti sewaktu-waktu untuk perawatan. Kami berupaya menjaga akurasi materi, namun tidak menjamin bebas kesalahan.</p><h3>Perubahan dan hukum</h3><p>Syarat ini dapat diperbarui. Penggunaan lanjutan berarti kamu menyetujuinya. Berlaku hukum Republik Indonesia.</p>`],
+syarat:['Syarat Layanan',`<p>Terakhir diperbarui: 15 November 2026.</p><h3>Penggunaan</h3><p>ISYARA adalah media belajar BISINDO untuk tujuan pendidikan. Materinya tidak menggantikan kursus resmi atau juru bahasa isyarat profesional.</p><h3>Akun</h3><p>Kamu bertanggung jawab atas keamanan akunmu. Satu akun untuk satu orang; dilarang membagikan akun atau kode aktivasi.</p><h3>Premium dan pembayaran</h3><ul><li>Premium membuka level berlabel Premium selama masa paket.</li><li>Pembayaran lewat QRIS diverifikasi manual oleh admin.</li><li>Harga dan paket dapat berubah; pembayaran yang sudah dilakukan tidak terpengaruh.</li><li>Pengembalian dana mengikuti Kebijakan Refund.</li></ul><h3>Hak cipta</h3><p>Video, teks, logo, dan desain ISYARA dilindungi hak cipta. Dilarang mengunduh massal, menggandakan, atau menjualnya kembali tanpa izin.</p><h3>Batas tanggung jawab</h3><p>Layanan diberikan apa adanya dan dapat berhenti sewaktu-waktu untuk perawatan. Kami berupaya menjaga akurasi materi, namun tidak menjamin bebas kesalahan.</p><h3>Perubahan dan hukum</h3><p>Syarat ini dapat diperbarui. Penggunaan lanjutan berarti kamu menyetujuinya. Berlaku hukum Republik Indonesia.</p>`],
 refund:['Kebijakan Refund',`<p>Terakhir diperbarui: 15 November 2026.</p><h3>Prinsip umum</h3><p>Premium adalah layanan digital yang aktif setelah pembayaran diverifikasi. Pembayaran yang sudah diaktifkan pada dasarnya tidak dapat dikembalikan.</p><h3>Refund diberikan jika</h3><ul><li>Terjadi pembayaran ganda untuk paket yang sama.</li><li>Pembayaran sudah kami terima tetapi Premium belum aktif dalam 2×24 jam sejak bukti dikirim, dan kendala tidak dapat kami selesaikan.</li><li>Kendala teknis dari pihak kami menghalangi akses Premium lebih dari 7 hari berturut-turut.</li></ul><h3>Cara mengajukan</h3><p>Kirim permintaan lewat halaman Kontak dalam 7 hari sejak pembayaran, sertakan email akun, bukti bayar, dan alasan. Jika disetujui, dana dikembalikan ke rekening atau e-wallet asal dalam 3–7 hari kerja.</p><h3>Tidak termasuk</h3><p>Perubahan pikiran setelah Premium aktif dan dipakai, serta pelanggaran Syarat Layanan seperti berbagi akun.</p>`]};
 function legal(k){LEG=k;go('legal')}
 function renderLegal(){const d=LEGAL[LEG];$('#v-legal').innerHTML=`<div class="doc"><h2 style="margin-top:0">${d[0]}</h2>${d[1]}<p><button class="link" onclick="go(S?'map':'auth')">Kembali</button></p></div>`}
