@@ -240,7 +240,7 @@ LW('Basic Word 1','maaf=Maaf,perkenalkan=Perkenalkan,salam-kenal=Salam kenal,suk
 LW('Kata Tanya','apa=Apa,berapa=Berapa,bagaimana=Bagaimana,dimana=Di mana,kapan=Kapan,siapa=Siapa,kenapa=Kenapa'),
 LW('Keterangan Waktu','kadang-kadang=Kadang-kadang,selalu=Selalu,kemarin=Kemarin,tadi=Tadi',1),
 LW('Sapaan','apa-kabar=Apa kabar,halo=Halo,sampai-bertemu-lagi=Sampai bertemu lagi,selamat-pagi=Selamat pagi,selamat-siang=Selamat siang,selamat-sore=Selamat sore,selamat-malam=Selamat malam,senang-bertemu-kamu=Senang bertemu kamu',1),
-LW('Basic Word 2','saya=Saya,kamu=Kamu,ya=Ya,tidak=Tidak,makan=Makan,minum=Minum,belajar=Belajar,pergi=Pergi',1)];
+LW('Keluarga','ayah=Ayah,ibu=Ibu,kakak=Kakak,adik=Adik',1)];
 const OPEN=CFG.levelBuka||9; /* jumlah level yang sudah dibuka; level sesudahnya 'Segera hadir' */
 LEVELS.forEach(v=>(v.w||[]).forEach(id=>VIDEO_SRC[id]=(CFG.wordBase||CFG.videoBase)+id+CFG.videoExt));Object.assign(VIDEO_SRC,CFG.videos);
 const PLANS=[{n:'1 bulan',d:30,p:29000},{n:'3 bulan',d:90,p:69000},{n:'12 bulan',d:365,p:199000}],METH=['QRIS','Transfer bank','E-wallet'];
